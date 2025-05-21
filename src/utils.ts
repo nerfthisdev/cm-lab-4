@@ -33,3 +33,48 @@ export function determinationCoefficient(
   const ssRes = sum(y.map((yi, i) => (yi - yApprox[i]) ** 2));
   return 1 - ssRes / ssTot;
 }
+
+export function solveLinearSystem(A: number[][], B: number[]): number[] {
+  const n = A.length;
+  const matrix = A.map((row, i) => [...row, B[i]]); // Расширяем матрицу (добавляем B как последний столбец)
+
+  // Прямой ход Гаусса
+  for (let i = 0; i < n; i++) {
+    // Поиск максимального элемента по столбцу (для устойчивости)
+    let maxRow = i;
+    for (let k = i + 1; k < n; k++) {
+      if (Math.abs(matrix[k][i]) > Math.abs(matrix[maxRow][i])) {
+        maxRow = k;
+      }
+    }
+
+    // Обмен строк
+    [matrix[i], matrix[maxRow]] = [matrix[maxRow], matrix[i]];
+
+    // Нормализация строки
+    const pivot = matrix[i][i];
+    if (pivot === 0) throw new Error("Система не имеет единственного решения");
+    for (let j = i; j <= n; j++) {
+      matrix[i][j] /= pivot;
+    }
+
+    // Обнуление под текущим элементом
+    for (let k = i + 1; k < n; k++) {
+      const factor = matrix[k][i];
+      for (let j = i; j <= n; j++) {
+        matrix[k][j] -= factor * matrix[i][j];
+      }
+    }
+  }
+
+  // Обратный ход
+  const x = new Array(n).fill(0);
+  for (let i = n - 1; i >= 0; i--) {
+    x[i] = matrix[i][n];
+    for (let j = i + 1; j < n; j++) {
+      x[i] -= matrix[i][j] * x[j];
+    }
+  }
+
+  return x;
+}
