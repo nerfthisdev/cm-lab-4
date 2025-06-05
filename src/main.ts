@@ -7,6 +7,7 @@ import { quadratic } from "./math/quadratic";
 import { cubic } from "./math/qubic";
 import { power } from "./math/power";
 import { readPointsFromFile } from "./io/readInput";
+import { createApproximationGraph } from "./graph";
 function describeCorrelation(r: number): string {
   if (Math.abs(r) >= 0.9) return "весьма высокая связь";
   if (Math.abs(r) >= 0.7) return "высокая связь";
@@ -60,7 +61,16 @@ function main() {
     exponential(x, y),
   ];
 
-  results.forEach((r) => {
+  const fileNames = [
+    "linear.html",
+    "quadratic.html",
+    "cubic.html",
+    "logarithmic.html",
+    "power.html",
+    "exponential.html",
+  ];
+
+  results.forEach((r, idx) => {
     console.log(`\n--- ${r.name} ---`);
     console.log(`Формула: ${r.formula}`);
     console.log(`S = ${r.s.toFixed(4)}, σ = ${r.sigma.toFixed(4)}`);
@@ -70,6 +80,8 @@ function main() {
     if (r.r2 !== undefined) {
       console.log(`R² = ${r.r2.toFixed(4)} — ${describeDetermination(r.r2)}`);
     }
+    createApproximationGraph(x, y, r, fileNames[idx]);
+    console.log(`График сохранен в ${fileNames[idx]}`);
   });
 
   const best = results.reduce((min, curr) =>
