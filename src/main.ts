@@ -65,6 +65,30 @@ function main() {
       "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы",
     );
 
+  const allYEqual = y.every((val) => val === y[0]);
+  if (allYEqual) {
+    console.log("\nВсе значения y равны. Функция постоянна: y = " + y[0]);
+    console.log("Единственная адекватная аппроксимация — y = " + y[0]);
+
+    createComparisonGraph(
+      x,
+      y,
+      [
+        {
+          name: "Constant",
+          formula: `y = ${y[0]}`,
+          s: 0,
+          sigma: 0,
+          r2: 1,
+          predict: (_) => y[0],
+        },
+      ],
+      "comparison.html",
+    );
+    console.log("График сохранен в comparison.html");
+    return;
+  }
+
   const results: ApproximationResult[] = [
     linear(x, y),
     quadratic(x, y),
