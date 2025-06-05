@@ -12,10 +12,11 @@ export function linear(x: number[], y: number[]): ApproximationResult {
   const sumX = sum(x);
   const sumY = sum(y);
   const sumXY = sumProduct(x, y);
-  const sumX2 = sumSquares(x);
+  const sumXX = sumSquares(x);
 
-  const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX ** 2);
-  const b = (sumY - a * sumX) / n;
+  // Крамер
+  const a = (n * sumXY - sumX * sumY) / (n * sumXX - sumX ** 2);
+  const b = (sumXX * sumY - sumX * sumXY) / (n * sumXX - sumX ** 2);
 
   const predict = (xVal: number) => a * xVal + b;
   const yApprox = x.map(predict);

@@ -11,8 +11,11 @@ export function power(x: number[], y: number[]): ApproximationResult {
   const sumLnX2 = sum(lnX.map((val) => val ** 2));
   const sumLnXLnY = sum(lnX.map((xi, i) => xi * lnY[i]));
 
+  const LnA =
+    (sumLnY * sumLnX2 - sumLnX * sumLnXLnY) / (n * sumLnX2 - sumLnX ** 2);
+
   const b = (n * sumLnXLnY - sumLnX * sumLnY) / (n * sumLnX2 - sumLnX ** 2);
-  const a = Math.exp((sumLnY - b * sumLnX) / n);
+  const a = Math.exp(LnA);
 
   const predict = (xVal: number) => a * xVal ** b;
   const yApprox = x.map(predict);

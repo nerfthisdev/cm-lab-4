@@ -7,11 +7,13 @@ export function exponential(x: number[], y: number[]): ApproximationResult {
 
   const sumX = sum(x);
   const sumLnY = sum(lnY);
-  const sumX2 = sum(x.map((val) => val ** 2));
+  const sumXX = sum(x.map((val) => val ** 2));
   const sumXLnY = sum(x.map((xi, i) => xi * lnY[i]));
 
-  const b = (n * sumXLnY - sumX * sumLnY) / (n * sumX2 - sumX ** 2);
-  const lnA = (sumLnY - b * sumX) / n;
+  // Крамер
+
+  const b = (n * sumXLnY - sumX * sumLnY) / (n * sumXX - sumX ** 2);
+  const lnA = (sumLnY * sumXX - sumX * sumXLnY) / (n * sumXX - sumX ** 2);
   const a = Math.exp(lnA);
 
   const predict = (xVal: number) => a * Math.exp(b * xVal);

@@ -58,11 +58,11 @@ function main() {
   console.log("\n[Информация о данных]");
   if (hasNegativeX)
     console.log(
-      "⚠️ В данных есть x <= 0 — логарифмическая и степенная аппроксимации недопустимы"
+      "⚠️ В данных есть x <= 0 — логарифмическая и степенная аппроксимации недопустимы",
     );
   if (hasNegativeY)
     console.log(
-      "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы"
+      "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы",
     );
 
   const results: ApproximationResult[] = [
@@ -74,16 +74,7 @@ function main() {
     ...(hasNegativeY ? [] : [exponential(x, y)]),
   ];
 
-  const fileNames = [
-    "linear.html",
-    "quadratic.html",
-    "cubic.html",
-    "logarithmic.html",
-    "power.html",
-    "exponential.html",
-  ];
-
-  results.forEach((r, idx) => {
+  results.forEach((r) => {
     console.log(`\n--- ${r.name} ---`);
     console.log(`Формула: ${r.formula}`);
     console.log(`S = ${r.s.toFixed(4)}, σ = ${r.sigma.toFixed(4)}`);
@@ -99,12 +90,12 @@ function main() {
   console.log("График сохранен в comparison.html");
 
   const best = results.reduce((min, curr) =>
-    curr.sigma < min.sigma ? curr : min
+    curr.sigma < min.sigma ? curr : min,
   );
   console.log(`\nНаилучшее приближение: ${best.name}`);
 
   const showTable = readlineSync.question(
-    "Вывести таблицу значений? (да/нет): "
+    "Вывести таблицу значений? (да/нет): ",
   );
   if (showTable.toLowerCase() === "да") {
     console.log(`\nТаблица для функции: ${best.name}`);
@@ -117,8 +108,10 @@ function main() {
       console.log(
         `${xi.toFixed(4).padEnd(8)} | ${actual.toFixed(4).padEnd(8)} | ${approx
           .toFixed(4)
-          .padEnd(8)} | ${eps.toFixed(4).padEnd(8)}`
+          .padEnd(8)} | ${eps.toFixed(4).padEnd(8)}`,
       );
     });
   }
 }
+
+main();

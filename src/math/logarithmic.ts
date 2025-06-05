@@ -10,8 +10,10 @@ export function logarithmic(x: number[], y: number[]): ApproximationResult {
   const sumLnX2 = sum(lnX.map((val) => val ** 2));
   const sumLnXY = sum(lnX.map((xi, i) => xi * y[i]));
 
-  const a = (n * sumLnXY - sumLnX * sumY) / (n * sumLnX2 - sumLnX ** 2);
-  const b = (sumY - a * sumLnX) / n;
+  //Крамер
+
+  const a = (sumLnXY * n - sumLnX * sumY) / (sumLnX2 * n - sumLnX ** 2);
+  const b = (sumLnX2 * sumY - sumLnXY * sumLnX) / (sumLnX2 * n - sumLnX ** 2);
 
   const predict = (xVal: number) => a * Math.log(xVal) + b;
   const yApprox = x.map(predict);
