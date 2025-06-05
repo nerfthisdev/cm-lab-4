@@ -4,10 +4,10 @@ import { ApproximationResult, Point } from "./models";
 import { exponential } from "./math/exponential";
 import { logarithmic } from "./math/logarithmic";
 import { quadratic } from "./math/quadratic";
-import { cubic } from "./math/qubic";
+import { cubic } from "./math/cubic";
 import { power } from "./math/power";
 import { readPointsFromFile } from "./io/readInput";
-import { createApproximationGraph } from "./graph";
+import { createComparisonGraph } from "./graph";
 function describeCorrelation(r: number): string {
   if (Math.abs(r) >= 0.9) return "весьма высокая связь";
   if (Math.abs(r) >= 0.7) return "высокая связь";
@@ -58,11 +58,11 @@ function main() {
   console.log("\n[Информация о данных]");
   if (hasNegativeX)
     console.log(
-      "⚠️ В данных есть x <= 0 — логарифмическая и степенная аппроксимации недопустимы",
+      "⚠️ В данных есть x <= 0 — логарифмическая и степенная аппроксимации недопустимы"
     );
   if (hasNegativeY)
     console.log(
-      "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы",
+      "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы"
     );
 
   const results: ApproximationResult[] = [
@@ -93,17 +93,18 @@ function main() {
     if (r.r2 !== undefined) {
       console.log(`R² = ${r.r2.toFixed(4)} — ${describeDetermination(r.r2)}`);
     }
-    createApproximationGraph(x, y, r, fileNames[idx]);
-    console.log(`График сохранен в ${fileNames[idx]}`);
   });
 
+  createComparisonGraph(x, y, results, "comparison.html");
+  console.log("График сохранен в comparison.html");
+
   const best = results.reduce((min, curr) =>
-    curr.sigma < min.sigma ? curr : min,
+    curr.sigma < min.sigma ? curr : min
   );
   console.log(`\nНаилучшее приближение: ${best.name}`);
 
   const showTable = readlineSync.question(
-    "Вывести таблицу значений? (да/нет): ",
+    "Вывести таблицу значений? (да/нет): "
   );
   if (showTable.toLowerCase() === "да") {
     console.log(`\nТаблица для функции: ${best.name}`);
@@ -114,10 +115,10 @@ function main() {
       const approx = best.predict(xi);
       const eps = approx - actual;
       console.log(
-        `${xi.toFixed(4).padEnd(8)} | ${actual.toFixed(4).padEnd(8)} | ${approx.toFixed(4).padEnd(8)} | ${eps.toFixed(4).padEnd(8)}`,
+        `${xi.toFixed(4).padEnd(8)} | ${actual.toFixed(4).padEnd(8)} | ${approx
+          .toFixed(4)
+          .padEnd(8)} | ${eps.toFixed(4).padEnd(8)}`
       );
     });
   }
 }
-
-main();
