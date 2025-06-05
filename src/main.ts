@@ -7,6 +7,7 @@ import { quadratic } from "./math/quadratic";
 import { cubic } from "./math/qubic";
 import { power } from "./math/power";
 import { readPointsFromFile } from "./io/readInput";
+import { createComparisonGraph } from "./graph";
 function describeCorrelation(r: number): string {
   if (Math.abs(r) >= 0.9) return "весьма высокая связь";
   if (Math.abs(r) >= 0.7) return "высокая связь";
@@ -71,6 +72,9 @@ function main() {
       console.log(`R² = ${r.r2.toFixed(4)} — ${describeDetermination(r.r2)}`);
     }
   });
+
+  createComparisonGraph(x, y, results, "comparison.html");
+  console.log("График сохранен в comparison.html");
 
   const best = results.reduce((min, curr) =>
     curr.sigma < min.sigma ? curr : min,
