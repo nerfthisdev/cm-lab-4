@@ -1,6 +1,6 @@
 import readlineSync from "readline-sync";
 import { linear } from "./math/linear";
-import { Point } from "./models";
+import { ApproximationResult, Point } from "./models";
 import { exponential } from "./math/exponential";
 import { logarithmic } from "./math/logarithmic";
 import { quadratic } from "./math/quadratic";
@@ -52,13 +52,26 @@ function main() {
   const x = points.map((p) => p.x);
   const y = points.map((p) => p.y);
 
-  const results = [
+  const hasNegativeX = x.some((v) => v <= 0);
+  const hasNegativeY = y.some((v) => v <= 0);
+
+  console.log("\n[Информация о данных]");
+  if (hasNegativeX)
+    console.log(
+      "⚠️ В данных есть x <= 0 — логарифмическая и степенная аппроксимации недопустимы",
+    );
+  if (hasNegativeY)
+    console.log(
+      "⚠️ В данных есть y <= 0 — экспоненциальная и степенная аппроксимации недопустимы",
+    );
+
+  const results: ApproximationResult[] = [
     linear(x, y),
     quadratic(x, y),
     cubic(x, y),
-    logarithmic(x, y),
-    power(x, y),
-    exponential(x, y),
+    ...(hasNegativeX ? [] : [logarithmic(x, y)]),
+    ...(hasNegativeX || hasNegativeY ? [] : [power(x, y)]),
+    ...(hasNegativeY ? [] : [exponential(x, y)]),
   ];
 
   const fileNames = [
